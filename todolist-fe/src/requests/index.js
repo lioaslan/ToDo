@@ -1,49 +1,27 @@
 import axios from "axios";
 
-export const login = user => {
-  return axios
-    .post("users/login", {
-      username: user.username,
-      password: user.pasword
-    })
-    .then(response => {
-      const data = response.data;
-      localStorage.getItem("usertoken", data.token);
-      localStorage.getItem("todos", data.todos);
-      return data;
-    })
-    .catch(err => console.log(err));
+export const login = async user => {
+  const result = await axios.post("/users/login", user);
+  return result.data;
 };
 
-export const addTodo = todo => {
-  return axios
-    .post("todo/add", { todo })
-    .then(renponse => {
-      console.log("Added Todo");
-    })
-    .catch(err => {
-      console.log(err);
-    });
+export const initTodosRequest = async () => {
+  const result = await axios.get('/todo/init');
+  return result.data;
+}
+
+export const addTodoRequest = async todo => {
+  await axios.post("/todo/add", { todo });
+  console.log("Added Todo");
 };
 
-export const deleteTodo = todo => {
-  return axios
-    .post("todo/delete", { todo })
-    .then(renponse => {
-      console.log("Deleted");
-    })
-    .catch(err => {
-      console.log(err);
-    });
+export const deleteTodoRequest = async id => {
+  console.log(id)
+  await axios.patch("/todo/delete", { id });
+  console.log("Deleted todo");
 };
 
-export const changeStatus = todo => {
-  return axios
-    .post("todo/change-status", { todo })
-    .then(response => {
-      console.log("Changed");
-    })
-    .catch(err => {
-      console.log(err);
-    });
+export const changeStatusRequest = async (id, status) => {
+  await axios.patch("/todo/change-status", { id, status });
+  console.log("Changed status todo");
 };

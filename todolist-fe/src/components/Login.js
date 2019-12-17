@@ -5,7 +5,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import LockIcon from "@material-ui/icons/Lock";
 import Button from "@material-ui/core/Button";
-import login from "../request"
+import {login} from "../requests";
 
 const style = {
   margin: "160px 500px",
@@ -14,40 +14,62 @@ const style = {
 };
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  async handleSubmit(e, inputUsername, inputPassword) {
+    e.preventDefault();
+    const user = {
+      username: inputUsername.value,
+      password: inputPassword.value
+    };
+
+    const res = await login(user);
+    const {loggedIn} = res;
+    if (loggedIn)
+      this.props.history.push('./home');
+    else 
+      alert('Username/Password is incorrect');
+  }
   render() {
+    let inputUsername, inputPassword;
     return (
-        <Paper style={style}>
-          <div style={{ textAlign: "center" }}>LOGIN</div>
-          <div style={{ margin: "30px" }}>
-            <form>
-              <TextField
-                label="Username"
-                style={{ display: "block" }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PersonIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                label="Password"
-                style={{ display: "block", margin: "10px 0px" }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <Button style={{ width: "100%", margin: "20px 0px" }}>
-                LOGIN
-              </Button>
-            </form>
-          </div>
-        </Paper>
+      <Paper style={style}>
+        <div style={{ textAlign: "center" }}>LOGIN</div>
+        <div style={{ margin: "30px" }}>
+          <form onSubmit={e => this.handleSubmit(e, inputUsername, inputPassword)}>
+            <TextField
+              label="Username"
+              style={{ display: "block" }}
+              inputRef={node => inputUsername = node}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonIcon />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <TextField
+              label="Password"
+              style={{ display: "block", margin: "10px 0px" }}
+              inputRef={node => inputPassword = node}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <Button type="submit" style={{ width: "100%", margin: "20px 0px" }}>
+              LOGIN
+            </Button>
+          </form>
+        </div>
+      </Paper>
     );
   }
 }

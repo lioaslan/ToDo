@@ -1,7 +1,7 @@
-export const addToDo = text =>{
+export const addToDo = task =>{
     return {
         type: 'ADD_TODO',
-        text
+        task
     }
 }
 
@@ -18,4 +18,11 @@ export const changeStatus = (id, status) => {
         id, 
         status
     }
+}
+
+export const initTodos = (todos) => {
+    return {
+        type: 'INIT_TODOS',
+        todos
+    } 
 }

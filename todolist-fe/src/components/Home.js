@@ -5,23 +5,29 @@ import Grid from "@material-ui/core/Grid";
 import AddToDo from "./AddToDo";
 import ToDoList from "./ToDoList";
 import VisibleFilter from "./VisibleFilter";
+import { initTodos } from "../actions";
+import { initTodosRequest } from "../requests";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentStatus: 'all'
+      currentStatus: "all"
     };
   }
 
+  async componentDidMount(){
+    const todos = await initTodosRequest();
+    this.props.initTodos(todos);
+  }
+
   handleClick(status) {
-   this.setState({
-     currentStatus: status
-   })
+    this.setState({
+      currentStatus: status
+    });
   }
 
   render() {
-    console.log(this.props.todos);
     return (
       <Paper style={{ paddingBottom: "20px" }}>
         <div>
@@ -35,13 +41,13 @@ class Home extends Component {
         <Grid container spacing={2}>
           <Grid item xs={2}>
             <Paper style={{ margin: "10px" }}>
-              <VisibleFilter handleClick={(status) => this.handleClick(status)} />
+              <VisibleFilter handleClick={status => this.handleClick(status)} />
             </Paper>
           </Grid>
 
           <Grid item xs={10}>
             <Paper style={{ margin: "10px", padding: "10px" }}>
-              <ToDoList todos={this.props.todos} status={this.state.currentStatus} />
+              <ToDoList status={this.state.currentStatus} />
             </Paper>
           </Grid>
         </Grid>
@@ -50,10 +56,12 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    todos: state.todos
-  };
-}
+const mapStateToProps = state => state;
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch => {
+  return {
+    initTodos: todos => dispatch(initTodos(todos))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

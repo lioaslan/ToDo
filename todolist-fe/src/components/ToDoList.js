@@ -1,13 +1,18 @@
 import React from "react";
 import ToDo from "./ToDo";
+import {connect} from 'react-redux';
 
-export default class ToDoList extends React.Component {
+class ToDoList extends React.Component {
   render() {
     const { todos, status} = this.props;
-    const filteredTodos = status === 'all' ? todos : todos.filter(todo => todo.status === status)
+    const filteredTodos = status === 'all' ? todos : todos.filter(todo => todo.status === status);
     var todoNode = filteredTodos.map(todo => {
-      return <ToDo todo={todo.text} key={todo.id} id={todo.id} />;
+      return <ToDo todo={todo.task} key={todo.id} id={todo.id} />;
     });
     return <ul>{todoNode}</ul>;
   }
 }
+
+const mapStateToProps = state => ({todos: state.todos});
+
+export default connect(mapStateToProps)(ToDoList);

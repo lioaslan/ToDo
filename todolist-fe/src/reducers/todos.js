@@ -6,7 +6,7 @@ const todos = (state = [], action) => {
                 ...state,
                 {
                     id: todoIndex++,
-                    text: action.text,
+                    task: action.task,
                     status: "todo"
                 }
             ];
@@ -15,13 +15,14 @@ const todos = (state = [], action) => {
             return state.filter(todo => todo.id !== action.id);
 
         case 'CHANGE_STATUS':
-           
             return state.map((todo) => {
                 if (todo.id === action.id) 
                     todo.status = action.status;
                 return todo;
-            })
+            });
                 
+        case 'INIT_TODOS': 
+            return action.todos;
         default:
             return state;
     }

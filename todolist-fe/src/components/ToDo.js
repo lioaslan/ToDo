@@ -2,6 +2,7 @@ import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 import { deleteTodo, changeStatus } from '../actions';
+import { deleteTodoRequest, changeStatusRequest} from '../requests';
 import { connect } from 'react-redux';
 import DoneIcon from '@material-ui/icons/Done';
 import WorkIcon from '@material-ui/icons/Work';
@@ -20,7 +21,10 @@ class ToDo extends React.Component {
                     <span style = {{display: "inline-block" , margin: "10px" }}>
                         <Tooltip title="Doing">
                             <WorkIcon 
-                                onClick = {(e) => dispatch(changeStatus(id, 'doing'))}
+                                onClick = {(e) => {
+                                    dispatch(changeStatus(id, 'doing'))
+                                    changeStatusRequest(id, 'doing');
+                                }}
                             />
                         </Tooltip>
                     </span>
@@ -28,7 +32,10 @@ class ToDo extends React.Component {
                     <span style={{ display: "inline-block", margin: "10px" }}>
                         <Tooltip title="Done">
                             <DoneIcon 
-                                onClick = {(e) => dispatch(changeStatus(id, 'done'))}
+                                onClick = {(e) => {
+                                    dispatch(changeStatus(id, 'done'))
+                                    changeStatusRequest(id, 'done')
+                                }}
                             />
                         </Tooltip>
                     </span>
@@ -36,7 +43,10 @@ class ToDo extends React.Component {
                     <span style={{ display: "inline-block", margin: "10px"  }}>
                         <Tooltip title="Delete">
                             <DeleteIcon
-                                onClick={(e) => dispatch(deleteTodo(id))}
+                                onClick={(e) => {
+                                    dispatch(deleteTodo(id))
+                                    deleteTodoRequest(id);
+                                }}
                             />
                         </Tooltip>
                     </span>

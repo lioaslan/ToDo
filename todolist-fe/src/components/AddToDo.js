@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { addToDo } from '../actions';
+import { addTodoRequest } from '../requests';
 
 const paperStyle = {
     width: "90%",
     margin: "10px",
     padding: "10px"
-}
+};
 
 const AddToDo = ({ dispatch }) => {
     let input;
@@ -19,6 +20,7 @@ const AddToDo = ({ dispatch }) => {
                 onSubmit={(e) => {
                     e.preventDefault();
                     dispatch(addToDo(input.value));
+                    addTodoRequest(input.value);
                 }}>
                     
                 <Grid container spacing={0} >
