@@ -5,7 +5,10 @@ import PersonIcon from "@material-ui/icons/Person";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import LockIcon from "@material-ui/icons/Lock";
 import Button from "@material-ui/core/Button";
-import {login} from "../requests";
+import { loginRequest } from "../requests";
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const style = {
   margin: "160px 500px",
@@ -26,12 +29,12 @@ class Login extends Component {
       password: inputPassword.value
     };
 
-    const res = await login(user);
-    const {loggedIn} = res;
-    if (loggedIn)
-      this.props.history.push('./home');
-    else 
-      alert('Username/Password is incorrect');
+    const res = await loginRequest(user);
+    const { loggedIn, token } = res;
+    cookies.set('token', token, {path: '/'});
+    if (loggedIn) 
+      this.props.history.push("./home");
+    else alert("Username/Password is incorrect");
   }
   render() {
     let inputUsername, inputPassword;
@@ -39,11 +42,13 @@ class Login extends Component {
       <Paper style={style}>
         <div style={{ textAlign: "center" }}>LOGIN</div>
         <div style={{ margin: "30px" }}>
-          <form onSubmit={e => this.handleSubmit(e, inputUsername, inputPassword)}>
+          <form
+            onSubmit={e => this.handleSubmit(e, inputUsername, inputPassword)}
+          >
             <TextField
               label="Username"
               style={{ display: "block" }}
-              inputRef={node => inputUsername = node}
+              inputRef={node => (inputUsername = node)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -55,7 +60,8 @@ class Login extends Component {
             <TextField
               label="Password"
               style={{ display: "block", margin: "10px 0px" }}
-              inputRef={node => inputPassword = node}
+              inputRef={node => (inputPassword = node)}
+              type="password"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

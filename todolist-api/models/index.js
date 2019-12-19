@@ -7,10 +7,10 @@ client.connect();
 module.exports = {
   getUser: async () => await client.query('select * from users'),
   getTodos: async () => await client.query("select * from todos"),
-  addTodo: async todo => {
+  addTodo: async (id, task) => {
     const query = {
-      text: "insert into todos(task, status) values($1, $2)",
-      values: [todo, "todo"]
+      text: "insert into todos(id, task, status) values($1, $2, $3)",
+      values: [id, task, "todo"]
     };
     await client.query(query);
   },

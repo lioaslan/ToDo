@@ -1,6 +1,8 @@
 'use strict';
-
 const Hapi = require('@hapi/hapi');
+
+const users = require('../users');
+users.createUser('leoaslan', 'syphuongcuong3');
 
 const start = async () => {
   const server = Hapi.server({

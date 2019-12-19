@@ -4,7 +4,8 @@ module.exports = {
   method: "POST",
   path: "/todo/add",
   handler: async (request, reply) => {
-    await dbQuery.addTodo(request.payload.todo);
+    const {id, task} = request.payload;
+    await dbQuery.addTodo(id, task);
     return "Added todo";
   }
 };

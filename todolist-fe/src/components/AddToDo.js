@@ -19,8 +19,10 @@ const AddToDo = ({ dispatch }) => {
             <form id="form"
                 onSubmit={(e) => {
                     e.preventDefault();
-                    dispatch(addToDo(input.value));
-                    addTodoRequest(input.value);
+                    dispatch(addToDo(input.value)); 
+
+                    const id = localStorage.getItem('index');
+                    addTodoRequest(id, input.value);
                 }}>
                     
                 <Grid container spacing={0} >

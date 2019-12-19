@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import Cookies from "universal-cookie";
+
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Tooltip from "@material-ui/core/Tooltip";
+
 import AddToDo from "./AddToDo";
 import ToDoList from "./ToDoList";
 import VisibleFilter from "./VisibleFilter";
+
 import { initTodos } from "../actions";
-import { initTodosRequest } from "../requests";
+import { initTodosRequest, logoutRequest } from "../requests";
+
+const cookies = new Cookies();
 
 class Home extends Component {
   constructor(props) {
@@ -16,9 +24,13 @@ class Home extends Component {
     };
   }
 
-  async componentDidMount(){
-    const todos = await initTodosRequest();
-    this.props.initTodos(todos);
+  async componentDidMount() {
+    const token = cookies.get("token");
+    const res = await initTodosRequest(token);
+    if (res === "Not Logged In") {
+      alert("You haven't logged in yet");
+      this.props.history.push("./");
+    } else this.props.initTodos(res);
   }
 
   handleClick(status) {
@@ -27,11 +39,21 @@ class Home extends Component {
     });
   }
 
+  async handleExit() {
+    await logoutRequest();
+    this.props.history.push("./");
+  }
+
   render() {
     return (
       <Paper style={{ paddingBottom: "20px" }}>
         <div>
-          <h1 style={{ textAlign: "center" }}>ToDo List</h1>
+          <h1 style={{ textAlign: "center" }}>
+            ToDo List
+            <Tooltip title="Log out" style={{ marginLeft: "10px" }}>
+              <ExitToAppIcon onClick={() => this.handleExit()} />
+            </Tooltip>
+          </h1>
         </div>
 
         <div>
