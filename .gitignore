@@ -1,2 +1,2 @@
-./todolist-fe/node_modules
-./todolist-api/node_modules
+/todolist-fe/node_modules
+/todolist-api/node_modules
